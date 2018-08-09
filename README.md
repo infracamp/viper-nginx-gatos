@@ -23,6 +23,7 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
     ```
 3) Start the cloudfront service
     ```
+    docker pull infracamp/viper-nginx-gatos
     docker run -d --env-file config.env -p 80:80 -p 443:443 --net host --network gatos-net -v /var/run/docker.sock:/var/run/docker.sock --name cloudfront infracamp/viper-nginx-gatos
     ```
 
