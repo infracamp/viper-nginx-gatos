@@ -37,9 +37,9 @@ class InfoCtrl
         foreach ($cmd->getServiceList() as $serviceName => $info){
             $inspect = $cmd->getServiceInspect($serviceName);
 
-            $link = fhtml("a @href=http://?", [$serviceName . CONF_DEFAULT_HOSTNAME])->content($serviceName . CONF_DEFAULT_HOSTNAME);
+            $link = fhtml("a @href=http://:url", ["url" => $serviceName . CONF_DEFAULT_HOSTNAME])->content($serviceName . CONF_DEFAULT_HOSTNAME);
             if (isset ($inspect["Spec"]["Labels"]["cf_domain"])) {
-                $link = fhtml("a @href=http://?", [$inspect["Spec"]["Labels"]["cf_domain"]])->content($inspect["Spec"]["Labels"]["cf_domain"]);
+                $link = fhtml("a @href=http://:url", ["url" =>$inspect["Spec"]["Labels"]["cf_domain"]])->content($inspect["Spec"]["Labels"]["cf_domain"]);
             }
             $table->row([
                 $serviceName,
