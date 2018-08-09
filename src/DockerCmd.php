@@ -27,4 +27,11 @@ class DockerCmd
         return $services;
     }
 
+
+    public function getServiceInspect (string $service)
+    {
+        $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", ["ID" => $service]), true);
+        return $inspectData;
+    }
+
 }

@@ -9,12 +9,14 @@
 namespace App;
 
 use Infracamp\Gatos\DockerCmd;
+use Infracamp\Gatos\InfoCtrl;
 use Phore\MicroApp\App;
 use Phore\MicroApp\Exception\HttpException;
 use Phore\MicroApp\Handler\JsonExceptionHandler;
 use Phore\MicroApp\Handler\JsonResponseHandler;
 use Phore\MicroApp\Type\Request;
 use Phore\MicroApp\Type\RouteParams;
+use Phore\Theme\Bootstrap\Bootstrap4Module;
 
 require __DIR__ . "/../vendor/autoload.php";
 
@@ -33,10 +35,9 @@ $app->acl->addRule(\aclRule()->route("/*")->ALLOW());
 
 set_time_limit(3600);
 
+$app->addModule(new Bootstrap4Module());
 
-$app->router->get("/", function () {
-    return ["service" => "infracamp cloudfront gatos", "ready" => true];
-});
+$app->router->delegate("/", InfoCtrl::class);
 
 $app->router->get("/deploy/::path", function (RouteParams $routeParams, Request $request) {
     if ($request->GET->get("key") !== CONF_DEPLOY_KEY)

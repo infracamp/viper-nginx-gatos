@@ -9,7 +9,8 @@
   "require": {
     "php": ">=7.1",
     "phore/system": "dev-master",
-    "phore/micro-app": "dev-master"
+    "phore/micro-app": "dev-master",
+    "phore/theme-bootstrap": "dev-master"
   },
   "autoload": {
     "psr-4": {

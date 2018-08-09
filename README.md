@@ -15,6 +15,7 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
     
 2) Create a `config.env`-file for your cluster setup
     ```
+    CONF_CLUSTER_NAME=some fancy name to show on the status page
     CONF_DEFAULT_HOSTNAME=.srv.demo.com
     CONF_DEPLOY_KEY=secret_deploy_key
     CONF_REGISTRY_PREFIX=registry.gitlab.com/yourOrganisation
@@ -35,17 +36,15 @@ curl "http://cloudfront.your.domain/deploy/path/to/your_service?key=secret_deplo
 
 Will start/update a service `your_service` from `registry.gitlab.com/yourOrganisation/path/to/your_service:latest`.
 
-## Running
+## Details
 
+### Adding additional host names
 
-gatos.env
-```
-CONF_HOSTNAME=.srv.xy.com
-
-```
-
+Login to one manager node and add the label `cf_domain=some.domain.name`:
 
 ```
-docker run --net host -v /var/run/docker.sock:/var/run/docker.sock --network gatos-net --name cloudfront -e  infracamp/viper-nginx-gatos
+docker service upgrade --label-add cf_domain=some.domain.tld <serviceName>
 ```
+
+Cloudfront will detect the changes within 60 seconds and reload the nginx instance.
 

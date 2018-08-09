@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a047aa7742e4408d61cf961f6ce78e0",
+    "content-hash": "ae5f94e55073b37aeeac0f243b705e42",
     "packages": [
         {
             "name": "phore/di-base",
@@ -56,6 +56,52 @@
                 "di"
             ],
             "time": "2018-07-10T05:48:13+00:00"
+        },
+        {
+            "name": "phore/html",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phore/phore-html.git",
+                "reference": "2c2c20893f3d63c226892222eec3ced9bec95a97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phore/phore-html/zipball/2c2c20893f3d63c226892222eec3ced9bec95a97",
+                "reference": "2c2c20893f3d63c226892222eec3ced9bec95a97",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">7.0"
+            },
+            "require-dev": {
+                "erusev/parsedown-extra": "^0.7.1",
+                "psr/http-message": "^1.0"
+            },
+            "suggest": {
+                "erusev/parsedown-extra": "required to use markdown() methods"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phore\\Html\\": "src/"
+                },
+                "files": [
+                    "src/functions.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Leuffen",
+                    "email": "leuffen@continue.de"
+                }
+            ],
+            "time": "2018-07-13T13:46:27+00:00"
         },
         {
             "name": "phore/micro-app",
@@ -141,6 +187,46 @@
             "time": "2018-07-18T14:11:42+00:00"
         },
         {
+            "name": "phore/theme-bootstrap",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phore/phore-theme-bootstrap.git",
+                "reference": "cf86fe901155b66bbeeba5a895ec4ed4d734b3b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phore/phore-theme-bootstrap/zipball/cf86fe901155b66bbeeba5a895ec4ed4d734b3b6",
+                "reference": "cf86fe901155b66bbeeba5a895ec4ed4d734b3b6",
+                "shasum": ""
+            },
+            "require": {
+                "phore/html": "dev-master",
+                "php": ">7.0"
+            },
+            "require-dev": {
+                "phore/micro-app": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phore\\Theme\\Bootstrap\\": "src/"
+                },
+                "files": []
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Leuffen",
+                    "email": "leuffen@continue.de"
+                }
+            ],
+            "time": "2018-07-25T17:02:46+00:00"
+        },
+        {
             "name": "psr/container",
             "version": "dev-master",
             "source": {
@@ -195,7 +281,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "phore/system": 20,
-        "phore/micro-app": 20
+        "phore/micro-app": 20,
+        "phore/theme-bootstrap": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
