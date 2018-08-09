@@ -13,7 +13,7 @@ class DockerCmd
 {
 
     public function getServiceList () {
-        $txtData = "[" . phore_exec("sudo timeout 20 docker service ls --format '{{json . }}'") . "]";
+        $txtData = "[" . str_replace("\n", ",", phore_exec("sudo timeout 20 docker service ls --format '{{json . }}'")) . "]";
         $data = json_decode($txtData, true);
         if ($data === null)
             throw new \InvalidArgumentException("Cannot json decode output from docker service ls: $txtData");
