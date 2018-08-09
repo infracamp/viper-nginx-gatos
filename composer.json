@@ -1,0 +1,23 @@
+{
+  "name": "infracamp/viper-nginx-gatos",
+  "description": "",
+  "authors": [
+    { "name": "Matthias Leuffen", "email": "m@tth.es" }
+  ],
+  "repositories": [
+  ],
+  "require": {
+    "php": ">=7.1",
+    "phore/system": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Talpa\\Analytics\\": "src/"
+    },
+    "files": [
+      "src/function.php",
+      "config.php"
+    ]
+  },
+  "minimum-stability": "dev"
+}
