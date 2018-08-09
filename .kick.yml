@@ -20,8 +20,8 @@ command:
     - "composer update"
 
 
-  run2:
+  run:
     - "sudo /opt/bin/update-nginx.php"
 
   interval:
-    - "sudo /opt/bin/update-nginx.php"
+    - "sudo /opt/bin/update-nginx.php || true"
