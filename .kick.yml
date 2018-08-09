@@ -2,7 +2,6 @@ version: 1
 from: "infracamp/kickstart-flavor-gaia:testing"
 
 apache_fallback_resource: "/index.php"
-
 http_port: 4000
 
 config_file:
@@ -12,13 +11,17 @@ config_file:
 
 command:
   build:
+    - "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/timeout\" | sudo tee --append /etc/sudoers"
     - "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/docker\" | sudo tee --append /etc/sudoers"
+    #- "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/docker service\" | sudo tee --append /etc/sudoers"
     - "sudo apt-get -y install nginx docker.io"
+    - "sudo rm /var/www/html/index.nginx-debian.html"
+    - "sudo rm /etc/nginx/sites-enabled/default"
     - "composer update"
 
 
-  run:
-    - "/opt/bin/update-nginx.php"
+  run2:
+    - "sudo /opt/bin/update-nginx.php"
 
   interval:
-    - "/opt/bin/update-nginx.php"
+    - "sudo /opt/bin/update-nginx.php"

@@ -7,6 +7,11 @@
  */
 
 
-define("CONF_HOSTNAME", "%CONF_HOSTNAME%");
+define("CONF_DEFAULT_HOSTNAME", "%CONF_DEFAULT_HOSTNAME%");
+define("CONF_DEPLOY_KEY", "%CONF_DEPLOY_KEY%");
+define("CONF_REGISTRY_PREFIX", "%CONF_REGISTRY_PREFIX%");
+define("CONF_REGISTRY_LOGIN_USER", "%CONF_REGISTRY_LOGIN_USER%");
+define("CONF_REGISTRY_LOGIN_PASS", "%CONF_REGISTRY_LOGIN_PASS%");
 
 define("NGINX_CONF", "/etc/nginx/sites-enabled/cloudfront.conf");
+define("DOCKER_DEFAULT_NET", "gatos-net");

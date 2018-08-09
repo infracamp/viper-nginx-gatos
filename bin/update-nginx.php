@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 /**
  * Created by PhpStorm.
@@ -8,31 +9,27 @@
 
 namespace NginxUpdater;
 
+use Infracamp\Gatos\DockerCmd;
+
 require __DIR__ . "/../vendor/autoload.php";
 
 
 
-$data = "[" . phore_exec("sudo docker service ls --format '{{json . }}'") . "]";
-$data = json_decode($data, true);
+$cmd = new DockerCmd();
+$services = $cmd->getServiceList();
 
-$services = [];
-foreach ($data as $cur) {
-    $services[$cur["Name"]] = $cur;
-}
-
-ksort($services);
 
 $sha = "";
 if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "";
+$config = "server{listen 80; listen [::]:80; server_name default; location / { proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
     $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", $service), true);
 
-    $serverNames = "$serviceName" . CONF_HOSTNAME;
+    $serverNames = "$serviceName" . CONF_DEFAULT_HOSTNAME;
     foreach ($inspectData["Spec"]["Labels"] as $lName => $lValue) {
         if ($lName !== "cf_domain")
             continue;
@@ -40,11 +37,22 @@ foreach ($services as $serviceName => $service) {
 
     }
 
-
     $config .= "\n";
-    $config .= "server{listen 80; listen [::]:80; server_name $serverNames; location / { proxy_pass http://{$serverNames}:80/; } }";
-
-
+    if ($serviceName == gethostbyname($serviceName)) {
+        // cannot resolve
+        continue;
+    }
+    $config .= "
+    server {
+        listen 80; listen [::]:80; server_name $serverNames; 
+        location / {
+            proxy_set_header Host \$host;   
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; 
+            proxy_pass http://{$serviceName}:80/; 
+        } 
+    }
+    ";
 }
 
 if ($sha !== sha1($config)) {
