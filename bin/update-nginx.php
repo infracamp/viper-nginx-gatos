@@ -34,7 +34,6 @@ foreach ($services as $serviceName => $service) {
         if ($lName !== "cf_domain")
             continue;
         $serverNames .= " $lValue";
-
     }
 
     $config .= "\n";
