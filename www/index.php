@@ -59,7 +59,7 @@ $app->router->get("/deploy/::path", function (RouteParams $routeParams, Request 
         phore_exec("sudo timeout 30 docker service create --name :name --network :network --with-registry-auth :image", ["name" => $serviceName, "image" => $registry, "network"=>DOCKER_DEFAULT_NET]);
         $type="create";
     } else {
-        phore_exec("sudo timeout 30 docker service update :name --with-registry-auth", ["name" => $serviceName]);
+        phore_exec("sudo timeout 30 docker service update :name --force --with-registry-auth", ["name" => $serviceName]);
         $type="update";
     }
 
