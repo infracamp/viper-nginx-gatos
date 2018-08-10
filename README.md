@@ -13,9 +13,10 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
     docker network create --driver overlay --attachable gatos-net
     ```
     
-2) Create a `config.env`-file for your cluster setup
+2) Create a `cloudfront.env`-file for your cluster setup
     ```
     CONF_CLUSTER_NAME=some fancy name to show on the status page
+    CONF_CLUSTER_HOSTNAME=srv.demo.com
     CONF_DEFAULT_HOSTNAME=.srv.demo.com
     CONF_DEPLOY_KEY=secret_deploy_key
     CONF_REGISTRY_PREFIX=registry.gitlab.com/yourOrganisation
@@ -25,7 +26,7 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
 3) Start the cloudfront service
     ```
     docker pull infracamp/viper-nginx-gatos
-    docker run -d --env-file config.env -p 80:80 -p 443:443 --net host --network gatos-net -v /var/run/docker.sock:/var/run/docker.sock --name cloudfront infracamp/viper-nginx-gatos
+    docker run -d --env-file cloudfront.env -p 80:80 -p 443:443 --net host --network gatos-net -v /var/run/docker.sock:/var/run/docker.sock --name cloudfront infracamp/viper-nginx-gatos
     ```
 
 ## Updating the service
@@ -48,3 +49,14 @@ docker service upgrade --label-add cf_domain=some.domain.tld <serviceName>
 
 Cloudfront will detect the changes within 60 seconds and reload the nginx instance.
 
+### Auto reloading cloudfront
+
+```
+#!/bin/bash
+
+docker pull infracamp/viper-nginx-gatos:testing
+docker kill cloudfront && docker rm cloudfront
+
+docker run --env-file cloudfront.env -d -p 80:80 -p 443:443 --net host --network gatos-net -v /var/run/docker.sock:/var/run/docker.sock -d --name cloudfront infracamp/viper-nginx-gatos:testing
+
+```
