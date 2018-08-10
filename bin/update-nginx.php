@@ -61,7 +61,16 @@ foreach ($services as $serviceName => $service) {
     ";
 }
 
-if ($sha !== sha1($config)) {
+$localhostdown = false;
+try {
+    phore_http_request("http://localhost")->send(true);
+} catch (\Exception $e) {
+    $localhostdown = true;
+    echo "Error: Localhost is down!";
+}
+
+
+if ($sha !== sha1($config) || $localhostdown) {
     echo "\nRestart required.";
     file_put_contents(NGINX_CONF, $config);
     phore_exec("sudo service nginx restart");
