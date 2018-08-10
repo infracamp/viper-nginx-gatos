@@ -24,7 +24,8 @@ if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "server{listen 80; listen [::]:80; server_name default; location / { proxy_pass http://localhost:4000/; } }";
+$config = "server{listen 80; listen [::]:80; server_name default; location / { root /var/www/html/nginxroot; } }";
+$config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
     $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", $service), true);
