@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae5f94e55073b37aeeac0f243b705e42",
+    "content-hash": "669b1f77a194a087594e2a7d7c8a1acf",
     "packages": [
         {
             "name": "phore/di-base",
@@ -102,6 +102,55 @@
                 }
             ],
             "time": "2018-08-09T20:33:59+00:00"
+        },
+        {
+            "name": "phore/http-client",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phore/phore-http-client.git",
+                "reference": "a915167f0af0d7303b67809da8ecd9a7d780f638"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/a915167f0af0d7303b67809da8ecd9a7d780f638",
+                "reference": "a915167f0af0d7303b67809da8ecd9a7d780f638",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-http": "*",
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "nette/tester": "^2.1@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phore\\HttpClient\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Leuffen",
+                    "email": "m@tth.es"
+                }
+            ],
+            "description": "Http client library for fast api access",
+            "keywords": [
+                "Keyword1",
+                "Keyword2"
+            ],
+            "time": "2018-08-03T14:51:32+00:00"
         },
         {
             "name": "phore/micro-app",
@@ -282,7 +331,8 @@
     "stability-flags": {
         "phore/system": 20,
         "phore/micro-app": 20,
-        "phore/theme-bootstrap": 20
+        "phore/theme-bootstrap": 20,
+        "phore/http-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

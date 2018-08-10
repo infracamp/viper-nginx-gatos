@@ -42,6 +42,12 @@ foreach ($services as $serviceName => $service) {
         // cannot resolve
         continue;
     }
+    try {
+        phore_http_request("http://$serviceName")->send(true);
+    } catch (\Exception $e) {
+        continue;
+    }
+
     $config .= "
     server {
         listen 80; listen [::]:80; server_name $serverNames; 
