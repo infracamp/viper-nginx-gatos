@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "669b1f77a194a087594e2a7d7c8a1acf",
+    "content-hash": "e7f9328702dca22b1386cb557be5a601",
     "packages": [
         {
             "name": "phore/di-base",
@@ -109,12 +109,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-http-client.git",
-                "reference": "a915167f0af0d7303b67809da8ecd9a7d780f638"
+                "reference": "75231204f9b1103cba1e70fcbf9fadd4f45b1fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/a915167f0af0d7303b67809da8ecd9a7d780f638",
-                "reference": "a915167f0af0d7303b67809da8ecd9a7d780f638",
+                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/75231204f9b1103cba1e70fcbf9fadd4f45b1fc4",
+                "reference": "75231204f9b1103cba1e70fcbf9fadd4f45b1fc4",
                 "shasum": ""
             },
             "require": {
@@ -150,7 +150,7 @@
                 "Keyword1",
                 "Keyword2"
             ],
-            "time": "2018-08-03T14:51:32+00:00"
+            "time": "2018-08-13T10:05:26+00:00"
         },
         {
             "name": "phore/micro-app",
@@ -337,7 +337,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-yaml": "*",
+        "ext-json": "*"
     },
     "platform-dev": []
 }

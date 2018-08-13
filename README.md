@@ -37,7 +37,26 @@ curl "http://cloudfront.your.domain/deploy/path/to/your_service?key=secret_deplo
 
 Will start/update a service `your_service` from `registry.gitlab.com/yourOrganisation/path/to/your_service:latest`.
 
-## Details
+### Adding provisioning details
+
+```
+curl -X POST --data-binary @rudl-provision.yml "http://cloudfront.your.domain/deploy/path/to/your_service?key=secret_deploy_key"
+```
+
+With content:
+
+```
+cloudfront:
+    hostnames:
+    - "x.abc.com"
+    acl:
+      allow-ip:
+      - "192.168.0.0/24"
+      allow-user:
+      - "userid:cryptedpassword:comment"
+```
+
+
 
 ### Adding additional host names
 
@@ -60,3 +79,5 @@ docker kill cloudfront && docker rm cloudfront
 docker run --env-file cloudfront.env -d -p 80:80 -p 443:443 --net host --network gatos-net -v /var/run/docker.sock:/var/run/docker.sock -d --name cloudfront infracamp/viper-nginx-gatos:testing
 
 ```
+
+
