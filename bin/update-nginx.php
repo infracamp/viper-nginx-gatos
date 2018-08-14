@@ -24,7 +24,7 @@ if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "server{listen 80; listen [::]:80; server_name default; location / { root /var/www/html/nginxroot; } }";
+$config = "server{listen 80; listen [::]:80; server_name default; location / {  return 404; } location /404.html {root /var/www/html/nginxroot/error; internal;} error_page 404 /404.html; }";
 $config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
@@ -56,27 +56,29 @@ foreach ($services as $serviceName => $service) {
         continue;
     }
 
-    if ($serviceName == gethostbyname($serviceName)) {
-        // cannot resolve
-        continue;
-    }
     try {
+
+
         phore_http_request("http://$serviceName")->send(true);
+        $config .= "
+        server {
+            listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
+            location / {
+                proxy_set_header Host \$host;   
+                proxy_set_header X-Real-IP \$remote_addr;
+                proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; 
+                proxy_pass http://{$serviceName}:80/; 
+            } 
+        }
+        ";
     } catch (\Exception $e) {
-        continue;
+        $config .= "
+        server{listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; location / {  return 503; } location /503.html {root /var/www/html/nginxroot/error; internal;} error_page 503 /503.html; }
+        ";
     }
 
-    $config .= "
-    server {
-        listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
-        location / {
-            proxy_set_header Host \$host;   
-            proxy_set_header X-Real-IP \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; 
-            proxy_pass http://{$serviceName}:80/; 
-        } 
-    }
-    ";
+
+
 }
 
 $localhostdown = false;
