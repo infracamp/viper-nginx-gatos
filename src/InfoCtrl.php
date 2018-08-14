@@ -66,7 +66,8 @@ class InfoCtrl
                 "hr" => null,
                 "p" => [
                     "viper cloudfont by",
-                    "a @href=http://infracamp.org" => "infracamp.org"
+                    "a @href=http://infracamp.org" => "infracamp.org",
+                    " :: build " . VERSION_INFO
                 ]
 
             ],

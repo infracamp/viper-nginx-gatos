@@ -21,5 +21,4 @@ define("DOCKER_DEFAULT_NET", "gatos-net");
 // The label the config is stored in json format in docker swarm.
 define("CONFIG_SERVICE_LABEL", "org.infracamp.service.config");
 
-define("VERSION_INFO", "%VERSION_NUMBER%-%VERSION_DATE%");
-
+define("VERSION_INFO", "v0.1.%VERSION_NUMBER% (%VERSION_DATE_COMPACT%)");
