@@ -74,7 +74,8 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
         sleep(1);
         $status = $cmd->getServiceInspect($serviceName);
         if ((time()-20) > $startTime) {
-            $error = "Timeout: No status in 20 seconds. (State: '{$status["UpdateStatus"]["State"]}' Message: '{$status["UpdateStatus"]["Message"]}')";
+            if ($updateType !== "create")
+                $error = "Timeout: No status in 20 seconds. (State: '{$status["UpdateStatus"]["State"]}' Message: '{$status["UpdateStatus"]["Message"]}')";
             break;
         }
 
