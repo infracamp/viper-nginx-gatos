@@ -57,7 +57,7 @@ class DockerCmd
         ];
 
         if ( ! isset($runningServices[$serviceName])) {
-            phore_exec("sudo docker service create -d --force --name :name --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label :label --network :network :image", $opts);
+            phore_exec("sudo docker service create -d --name :name --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label :label --network :network :image", $opts);
             $type="create";
         } else {
             phore_exec("sudo docker service update -d --force --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label-add :label --image :image :name", $opts);
