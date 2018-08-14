@@ -36,10 +36,14 @@ class InfoCtrl
         $cmd = new DockerCmd();
         foreach ($cmd->getServiceList() as $serviceName => $info){
             $inspect = $cmd->getServiceInspect($serviceName);
+            $serviceConfig = $cmd->getParsedConfigLabel($serviceName);
 
-            $link = fhtml("a @href=http://:url", ["url" => $serviceName . CONF_DEFAULT_HOSTNAME])->content($serviceName . CONF_DEFAULT_HOSTNAME);
-            if (isset ($inspect["Spec"]["Labels"]["cf_domain"])) {
-                $link = fhtml("a @href=http://:url", ["url" =>$inspect["Spec"]["Labels"]["cf_domain"]])->content($inspect["Spec"]["Labels"]["cf_domain"]);
+            $links = fhtml();
+            if (isset ($serviceConfig["cloudfront"]) && isset($serviceConfig["cloudfront"]["hostnames"])) {
+                foreach ($serviceConfig["cloudfront"]["hostnames"] as $hostname) {
+                    $links->elem("a @href=:url", ["url" => "http://" . $hostname])->content($hostname);
+                    $links->content(" ");
+                }
             }
 
             $err = null;
@@ -53,7 +57,7 @@ class InfoCtrl
                 $serviceName,
                 $info["Replicas"],
                 date("Y-m-d H:i:s", $this->parseTs($inspect["UpdatedAt"])),
-                $link,
+                $links,
                 $err
             ], $err === null ? "@table-success" : "@table-warning");
         }

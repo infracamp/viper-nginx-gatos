@@ -28,16 +28,11 @@ $config = "server{listen 80; listen [::]:80; server_name default; location / {  
 $config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
-    $inspectData = $cmd->getServiceInspect($serviceName);
 
-    if ( ! isset ($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL])) {
-        echo "\nInvalid config in label " . CONFIG_SERVICE_LABEL;
-        continue;
-    }
-
-    $serviceConfig = json_decode($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL], true);
-    if ($serviceConfig === null){
-        echo "\nInvalid (invalid json data) config in label " . CONFIG_SERVICE_LABEL;
+    try {
+        $serviceConfig = $cmd->getParsedConfigLabel($serviceName);
+    } catch (\InvalidArgumentException $e) {
+        echo "\nError: " . $e->getMessage();
         continue;
     }
 

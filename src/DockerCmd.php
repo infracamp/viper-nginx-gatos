@@ -35,6 +35,21 @@ class DockerCmd
     }
 
 
+    public function getParsedConfigLabel (string $service) : array
+    {
+        $inspectData = $this->getServiceInspect($service);
+        if ( ! isset ($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL])) {
+            throw new \InvalidArgumentException("Invalid config in label " . CONFIG_SERVICE_LABEL );
+        }
+
+        $serviceConfig = json_decode($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL], true);
+        if ($serviceConfig === null){
+            throw new \InvalidArgumentException("Invalid (invalid json data) config in label " . CONFIG_SERVICE_LABEL);
+        }
+        return $serviceConfig;
+    }
+
+
     public function dockerLogin(string $user, string $pass, string $registryHost)
     {
         phore_exec("sudo docker login -u :user -p :pass :registry", [
