@@ -28,16 +28,34 @@ $config = "server{listen 80; listen [::]:80; server_name default; location / { r
 $config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
-    $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", $service), true);
+    $inspectData = $cmd->getServiceInspect($serviceName);
 
-    $serverNames = "$serviceName" . CONF_DEFAULT_HOSTNAME;
-    foreach ($inspectData["Spec"]["Labels"] as $lName => $lValue) {
-        if ($lName !== "cf_domain")
-            continue;
-        $serverNames .= " $lValue";
+    if ( ! isset ($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL])) {
+        echo "\nInvalid config in label " . CONFIG_SERVICE_LABEL;
+        continue;
     }
 
-    $config .= "\n";
+    $serviceConfig = json_decode($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL], true);
+    if ($serviceConfig === null){
+        echo "\nInvalid (invalid json data) config in label " . CONFIG_SERVICE_LABEL;
+        continue;
+    }
+
+    $serverNames = [];
+    if (CONF_DEFAULT_HOSTNAME !== "") {
+        $serverNames[] = "$serviceName" . CONF_DEFAULT_HOSTNAME;
+    }
+
+    if (isset ($serviceConfig["cloudfront"]) && isset($serviceConfig["cloudfront"]["hostnames"])) {
+        foreach ($serviceConfig["cloudfront"]["hostnames"] as $curHostname) {
+            $serverNames[] = $curHostname;
+        }
+    }
+
+    if (count($serverNames) == 0) {
+        continue;
+    }
+
     if ($serviceName == gethostbyname($serviceName)) {
         // cannot resolve
         continue;
@@ -50,7 +68,7 @@ foreach ($services as $serviceName => $service) {
 
     $config .= "
     server {
-        listen 80; listen [::]:80; server_name $serverNames; 
+        listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
         location / {
             proxy_set_header Host \$host;   
             proxy_set_header X-Real-IP \$remote_addr;

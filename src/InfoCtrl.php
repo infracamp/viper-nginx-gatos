@@ -31,7 +31,7 @@ class InfoCtrl
         $config = new Bootstrap4_Config();
         $config->title = "viper auto deployer";
 
-        $table = Table::Create(["Service", "Replicas", "Update", "Cloudfront"]);
+        $table = Table::Create(["Service", "Replicas", "Update", "Cloudfront", "Err"]);
 
         $cmd = new DockerCmd();
         foreach ($cmd->getServiceList() as $serviceName => $info){
@@ -41,12 +41,21 @@ class InfoCtrl
             if (isset ($inspect["Spec"]["Labels"]["cf_domain"])) {
                 $link = fhtml("a @href=http://:url", ["url" =>$inspect["Spec"]["Labels"]["cf_domain"]])->content($inspect["Spec"]["Labels"]["cf_domain"]);
             }
+
+            $err = null;
+            if (isset ($inspect["UpdateStatus"])) {
+                if ($inspect["UpdateStatus"]["State"] == "paused") {
+                    $err = $inspect["UpdateStatus"]["Message"];
+                }
+            }
+
             $table->row([
                 $serviceName,
                 $info["Replicas"],
                 date("Y-m-d H:i:s", $this->parseTs($inspect["UpdatedAt"])),
-                $link
-            ], $inspect["Spec"]["Mode"]["Replicated"]["Replicas"] > 0 ? "@table-success" : "@table-warning");
+                $link,
+                $err
+            ], $err === null ? "@table-success" : "@table-warning");
         }
 
 

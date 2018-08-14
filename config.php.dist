@@ -17,3 +17,9 @@ define("CONF_CLUSTER_HOSTNAME", "%CONF_CLUSTER_HOSTNAME%");
 
 define("NGINX_CONF", "/etc/nginx/sites-enabled/cloudfront.conf");
 define("DOCKER_DEFAULT_NET", "gatos-net");
+
+// The label the config is stored in json format in docker swarm.
+define("CONFIG_SERVICE_LABEL", "org.infracamp.service.config");
+
+define("VERSION_INFO", "%VERSION_NUMBER%-%VERSION_DATE%");
+
