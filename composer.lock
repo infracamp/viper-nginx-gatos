@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae5f94e55073b37aeeac0f243b705e42",
+    "content-hash": "e7f9328702dca22b1386cb557be5a601",
     "packages": [
         {
             "name": "phore/di-base",
@@ -63,12 +63,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-html.git",
-                "reference": "2c2c20893f3d63c226892222eec3ced9bec95a97"
+                "reference": "0679ee267889d2fcbf05372327de03b8205d82a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-html/zipball/2c2c20893f3d63c226892222eec3ced9bec95a97",
-                "reference": "2c2c20893f3d63c226892222eec3ced9bec95a97",
+                "url": "https://api.github.com/repos/phore/phore-html/zipball/0679ee267889d2fcbf05372327de03b8205d82a5",
+                "reference": "0679ee267889d2fcbf05372327de03b8205d82a5",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,56 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-07-13T13:46:27+00:00"
+            "time": "2018-08-09T20:33:59+00:00"
+        },
+        {
+            "name": "phore/http-client",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phore/phore-http-client.git",
+                "reference": "75231204f9b1103cba1e70fcbf9fadd4f45b1fc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/75231204f9b1103cba1e70fcbf9fadd4f45b1fc4",
+                "reference": "75231204f9b1103cba1e70fcbf9fadd4f45b1fc4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-http": "*",
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "nette/tester": "^2.1@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phore\\HttpClient\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Leuffen",
+                    "email": "m@tth.es"
+                }
+            ],
+            "description": "Http client library for fast api access",
+            "keywords": [
+                "Keyword1",
+                "Keyword2"
+            ],
+            "time": "2018-08-13T10:05:26+00:00"
         },
         {
             "name": "phore/micro-app",
@@ -109,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-micro-app.git",
-                "reference": "cacfc9280a38e6047d3c1ef3b5d3815799aba553"
+                "reference": "085f40de774a7cc750de7a8e712e11852439df54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/cacfc9280a38e6047d3c1ef3b5d3815799aba553",
-                "reference": "cacfc9280a38e6047d3c1ef3b5d3815799aba553",
+                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/085f40de774a7cc750de7a8e712e11852439df54",
+                "reference": "085f40de774a7cc750de7a8e712e11852439df54",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +195,7 @@
                 }
             ],
             "description": "Micro framework for rest api webservices",
-            "time": "2018-08-01T15:35:18+00:00"
+            "time": "2018-08-13T13:09:42+00:00"
         },
         {
             "name": "phore/system",
@@ -154,12 +203,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-system.git",
-                "reference": "d68117299e16e78378e49647aba89ac0ae626d41"
+                "reference": "0bbebdb512542c4271851834716ddc8a4eea624b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-system/zipball/d68117299e16e78378e49647aba89ac0ae626d41",
-                "reference": "d68117299e16e78378e49647aba89ac0ae626d41",
+                "url": "https://api.github.com/repos/phore/phore-system/zipball/0bbebdb512542c4271851834716ddc8a4eea624b",
+                "reference": "0bbebdb512542c4271851834716ddc8a4eea624b",
                 "shasum": ""
             },
             "require": {
@@ -184,7 +233,7 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-07-18T14:11:42+00:00"
+            "time": "2018-08-09T16:29:31+00:00"
         },
         {
             "name": "phore/theme-bootstrap",
@@ -282,12 +331,15 @@
     "stability-flags": {
         "phore/system": 20,
         "phore/micro-app": 20,
-        "phore/theme-bootstrap": 20
+        "phore/theme-bootstrap": 20,
+        "phore/http-client": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-yaml": "*",
+        "ext-json": "*"
     },
     "platform-dev": []
 }

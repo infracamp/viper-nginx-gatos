@@ -33,15 +33,16 @@ $app->setResponseHandler(new JsonResponseHandler());
 $app->acl->addRule(\aclRule()->route("/*")->ALLOW());
 
 
-set_time_limit(3600);
+set_time_limit(90);
 
 $app->addModule(new Bootstrap4Module());
 
 $app->router->delegate("/", InfoCtrl::class);
 
-$app->router->get("/deploy/::path", function (RouteParams $routeParams, Request $request) {
+
+$app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
     if ($request->GET->get("key") !== CONF_DEPLOY_KEY)
-        throw new HttpException("Authorisation failed", 403);
+        throw new HttpException("Authorisation (deploy key) failed", 403);
 
 
 
@@ -49,22 +50,53 @@ $app->router->get("/deploy/::path", function (RouteParams $routeParams, Request 
     $serviceName = basename($registry);
 
     $cmd = new DockerCmd();
-    $runningServices = $cmd->getServiceList();
-    phore_exec("sudo docker login -u :user -p :pass :registry", [
-        "registry" => explode("/", CONF_REGISTRY_PREFIX)[0],
-        "user" => CONF_REGISTRY_LOGIN_USER,
-        "pass" => CONF_REGISTRY_LOGIN_PASS
-    ]);
-    if ( ! isset($runningServices[$serviceName])) {
-        phore_exec("sudo timeout 30 docker service create --name :name --network :network --with-registry-auth :image", ["name" => $serviceName, "image" => $registry, "network"=>DOCKER_DEFAULT_NET]);
-        $type="create";
-    } else {
-        phore_exec("sudo timeout 30 docker service update :name --with-registry-auth", ["name" => $serviceName]);
-        $type="update";
+    try {
+        $cmd->dockerLogin(CONF_REGISTRY_LOGIN_USER, CONF_REGISTRY_LOGIN_PASS, explode("/", CONF_REGISTRY_PREFIX)[0]);
+    } catch (\Exception $e) {
+        throw new HttpException("Registry authentication failed. (docker login): Check your CONF_REGISTRY_PREFIX_* and CONF_REGISTY_LOGIN_* are correct.",521);
     }
 
+    $rudlConfig = [];
+    if ($request->requestMethod === "POST") {
+        $data = file_get_contents("php://input");
+        $rudlConfig = yaml_parse($data);
+        if ($rudlConfig === false)
+            throw new HttpException("Cannot parse POST payload data. No valid yaml content.", 522);
+    }
 
-    return ["registry" => $registry, "serviceName" => $serviceName, "type"=>$type];
+    $label = CONFIG_SERVICE_LABEL ."=" . json_encode($rudlConfig);
+
+    $updateType = $cmd->serviceDeploy($serviceName, $registry, $label);
+
+    $error = null;
+    $startTime = time();
+    while (true) {
+        sleep(1);
+        $status = $cmd->getServiceInspect($serviceName);
+        if ((time()-20) > $startTime) {
+            if ($updateType !== "create")
+                $error = "Timeout: No status in 20 seconds. (State: '{$status["UpdateStatus"]["State"]}' Message: '{$status["UpdateStatus"]["Message"]}')";
+            break;
+        }
+
+        if ( ! isset ($status["UpdateStatus"]))
+            continue;
+
+        if ($status["UpdateStatus"]["State"] == "completed") {
+            $error = null;
+            break;
+        }
+        if ($status["UpdateStatus"]["State"] == "paused") {
+            $error = $status["UpdateStatus"]["Message"];
+            break;
+        }
+
+    }
+
+    if($error !== null) {
+        throw new HttpException(json_encode(["registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "success"=>false, "error"=>$error]), 520);
+    }
+    return ["success"=>true, "registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType];
     //return true;
 });
 

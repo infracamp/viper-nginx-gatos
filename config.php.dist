@@ -13,6 +13,7 @@ define("CONF_REGISTRY_PREFIX", "%CONF_REGISTRY_PREFIX%");
 define("CONF_REGISTRY_LOGIN_USER", "%CONF_REGISTRY_LOGIN_USER%");
 define("CONF_REGISTRY_LOGIN_PASS", "%CONF_REGISTRY_LOGIN_PASS%");
 define("CONF_CLUSTER_NAME", "%CONF_CLUSTER_NAME%");
+define("CONF_CLUSTER_HOSTNAME", "%CONF_CLUSTER_HOSTNAME%");
 
 // Key to encrypt configuration passwords with (Frontend)
 define("CONF_SECRET_ENCRYPT", "%CONF_SECRET_ENCRYPT%");
@@ -20,3 +21,8 @@ define("CONF_SECRET_ENCRYPT", "%CONF_SECRET_ENCRYPT%");
 
 define("NGINX_CONF", "/etc/nginx/sites-enabled/cloudfront.conf");
 define("DOCKER_DEFAULT_NET", "gatos-net");
+
+// The label the config is stored in json format in docker swarm.
+define("CONFIG_SERVICE_LABEL", "org.infracamp.service.config");
+
+define("VERSION_INFO", "v0.1.%VERSION_NUMBER% (%VERSION_DATE_COMPACT%)");

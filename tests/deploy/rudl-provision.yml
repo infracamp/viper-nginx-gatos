@@ -1,0 +1,6 @@
+
+
+cloudfront:
+  hostnames:
+  - "wurst.xyz.de"
+

@@ -13,7 +13,7 @@ class DockerCmd
 {
 
     public function getServiceList () {
-        $txtData = "[" . implode(",", phore_exec("sudo timeout 20 docker service ls --format '{{json . }}'", [], true)) . "]";
+        $txtData = "[" . implode(",", phore_exec("sudo docker service ls --format '{{json . }}'", [], true)) . "]";
         $data = json_decode($txtData, true);
         if ($data === null)
             throw new \InvalidArgumentException("Cannot json decode output from docker service ls: $txtData");
@@ -33,5 +33,53 @@ class DockerCmd
         $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", ["ID" => $service]), true);
         return $inspectData;
     }
+
+
+    public function getParsedConfigLabel (string $service) : array
+    {
+        $inspectData = $this->getServiceInspect($service);
+        if ( ! isset ($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL])) {
+            throw new \InvalidArgumentException("Invalid config in label " . CONFIG_SERVICE_LABEL );
+        }
+
+        $serviceConfig = json_decode($inspectData["Spec"]["Labels"][CONFIG_SERVICE_LABEL], true);
+        if ($serviceConfig === null){
+            throw new \InvalidArgumentException("Invalid (invalid json data) config in label " . CONFIG_SERVICE_LABEL);
+        }
+        return $serviceConfig;
+    }
+
+
+    public function dockerLogin(string $user, string $pass, string $registryHost)
+    {
+        phore_exec("sudo docker login -u :user -p :pass :registry", [
+            "registry" => $registryHost,
+            "user" => $user,
+            "pass" => $pass
+        ]);
+    }
+
+    public function serviceDeploy (string $serviceName, string $image, string $label)
+    {
+
+        $runningServices = $this->getServiceList();
+
+        $opts =  [
+            "label"=> $label,
+            "name" => $serviceName,
+            "image" => $image,
+            "network" => DOCKER_DEFAULT_NET
+        ];
+
+        if ( ! isset($runningServices[$serviceName])) {
+            phore_exec("sudo docker service create -d --name :name --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label :label --network :network :image", $opts);
+            $type="create";
+        } else {
+            phore_exec("sudo docker service update -d --force --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label-add :label --image :image :name", $opts);
+            $type="update";
+        }
+        return $type;
+    }
+
 
 }
