@@ -34,17 +34,12 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
 curl "http://cloudfront.your.domain/deploy/path/to/your_service?key=secret_deploy_key"
 ```
 
+or with gitlab (the registry-url will be extracted from request and validated agaist allow auto-deploy):
+
+```
+curl "http://cloudfront.your.domain/deploy?key=secret_deploy_key
+```
+
 Will start/update a service `your_service` from `registry.gitlab.com/yourOrganisation/path/to/your_service:latest`.
 
-## Details
-
-### Adding additional host names
-
-Login to one manager node and add the label `cf_domain=some.domain.name`:
-
-```
-docker service upgrade --label-add cf_domain=some.domain.tld <serviceName>
-```
-
-Cloudfront will detect the changes within 60 seconds and reload the nginx instance.
 
