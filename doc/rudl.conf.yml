@@ -1,0 +1,27 @@
+version: 1
+
+config_pull_key: $5$alkdfjl$laksfjlakjlfkaslfklaskdfjownojnkek
+hostnames:
+  - "cluster1.cluster.org"
+users:
+  - name: zander
+    passwd: $6$lakjdf$lalksdfjowijoij$
+    allow_from:
+      - "192.158.82.288/24"
+
+zones:
+  juppie:
+    deploy_key: $6$lakjfsdlk$9j4hhwkv0skke29dskjals9nelkjlfskjfwölkwwljhab
+    secrets:
+      - name: blubb
+        auto: true
+    allow_image:
+      - "registry.gitlab.com/org1/*"
+    services:
+      - name: visuals
+        secrets:
+          - name: bullabue
+            auto: true
+        image: registry.gitlab.com/wurst/brot
+        hostnames:
+          - "pm.wxxd.org"
