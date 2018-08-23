@@ -59,10 +59,37 @@ class DockerCmd
         ]);
     }
 
+
+    private function buildParams (array $params)
+    {
+        $opts = [];
+        foreach ($params as $name => $value) {
+            if (is_null($value)) {
+                $opts[] = $name;
+                continue;
+            }
+            if (is_array($value)) {
+                foreach ($value as $curVal) {
+                    $opts[] = $name . " " . $curVal;
+                }
+                continue;
+            }
+            $opts[] = $name . " " . $curVal;
+        }
+        return implode(" ", $opts);
+    }
+
     public function serviceDeploy (string $serviceName, string $image, string $label)
     {
 
         $runningServices = $this->getServiceList();
+
+        $dockerOpts = [
+            "--log-opt" => "max-size=1m",
+            "--with-registry-auth" => null,
+            "--update-failure-action" => "pause",
+            "--restart-max-attempts" => 3,
+        ];
 
         $opts =  [
             "label"=> $label,
@@ -72,10 +99,10 @@ class DockerCmd
         ];
 
         if ( ! isset($runningServices[$serviceName])) {
-            phore_exec("sudo docker service create -d --name :name --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label :label --network :network :image", $opts);
+            phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --label :label --network :network :image", $opts);
             $type="create";
         } else {
-            phore_exec("sudo docker service update -d --force --restart-max-attempts 3 --update-failure-action pause --with-registry-auth --label-add :label --image :image :name", $opts);
+            phore_exec("sudo docker service update -d --force {$this->buildParams($dockerOpts)} --label-add :label --image :image :name", $opts);
             $type="update";
         }
         return $type;
