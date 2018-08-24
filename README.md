@@ -41,21 +41,24 @@ Will start/update a service `your_service` from `registry.gitlab.com/yourOrganis
 
 ### Adding provisioning details
 
-```
+```bash
 curl -X POST --data-binary @rudl-provision.yml "http://cloudfront.your.domain/deploy/path/to/your_service?key=secret_deploy_key"
 ```
 
 With content:
 
-```
-cloudfront:
-    hostnames:
-    - "x.abc.com"
-    acl:
-      allow-ip:
-      - "192.168.0.0/24"
-      allow-user:
-      - "userid:cryptedpassword:comment"
+```yaml
+deploy:
+  testing:
+    - manager: "cluster.name.org"
+      cloudfront:
+        hostnames:
+        - "x.abc.com"
+        acl:
+          allow-ip:
+          - "192.168.0.0/24"
+          allow-user:
+          - "userid:cryptedpassword:comment"
 ```
 
 
@@ -73,7 +76,7 @@ Will start/update a service `your_service` from `registry.gitlab.com/yourOrganis
 
 ### Auto reloading cloudfront
 
-```
+```bash
 #!/bin/bash
 
 docker pull infracamp/viper-nginx-gatos:testing

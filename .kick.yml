@@ -14,13 +14,16 @@ command:
     - "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/timeout\" | sudo tee --append /etc/sudoers"
     - "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/docker\" | sudo tee --append /etc/sudoers"
     #- "echo \"www-data   ALL = (ALL) NOPASSWD: /usr/bin/docker service\" | sudo tee --append /etc/sudoers"
-    - "sudo apt-get -y install nginx docker.io"
+    - "sudo apt-get -y install nginx docker.io dialog"
     - "sudo rm /var/www/html/index.nginx-debian.html"
     - "sudo rm /etc/nginx/sites-enabled/default"
     - "composer update"
 
+  setup:
+    - "IT:/opt/bin/setup.sh"
 
   run:
+  #  - "/opt/bin/init-cluster.php"
   #  - "sudo /opt/bin/update-nginx.php"
 
   interval:

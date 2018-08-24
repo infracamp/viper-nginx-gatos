@@ -60,6 +60,29 @@ class DockerCmd
     }
 
 
+    public function getConfig(string $configName) : array
+    {
+        $ret = phore_exec("sudo docker config inspect ?", [$configName]);
+        $ret = json_decode($ret, true);
+        if ($ret === null)
+            throw new \Exception("Can't decode response from docker config '$configName'");
+        $config = json_decode(base64_decode($ret[0]["Spec"]["Data"]), true);
+        if ($config === null)
+            throw new \Exception("Can't decode docker config data '$configName'");
+        return $config;
+    }
+
+    public function setConfig(string $configName, array $config)
+    {
+        try {
+            phore_exec("sudo docker config rm ? -", [$configName]);
+        } catch (\Exception $e) {
+            // Ignore empty config
+        }
+        phore_exec("echo ? | sudo docker config create ? -", [json_encode($config), $configName]);
+    }
+
+
     private function buildParams (array $params)
     {
         $opts = [];
