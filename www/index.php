@@ -78,31 +78,28 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
     $startTime = time();
     while (true) {
         sleep(1);
-        $status = $cmd->getServiceInspect($serviceName);
+        $status = $cmd->getServiceState($serviceName);
+
         if ((time()-20) > $startTime) {
             if ($updateType !== "create")
-                $error = "Timeout: No status in 20 seconds. (State: '{$status["UpdateStatus"]["State"]}' Message: '{$status["UpdateStatus"]["Message"]}')";
+                $error = "Timeout: No status in 20 seconds. ({$status["CurrentState"]})";
             break;
         }
 
-        if ( ! isset ($status["UpdateStatus"]))
-            continue;
+        if ($status["Error"] !== null) {
+            $error = $status["Error"];
+            break;
+        }
 
-        if ($status["UpdateStatus"]["State"] == "completed") {
+        if ($status["State"] === "Running") {
             $error = null;
             break;
         }
-        if ($status["UpdateStatus"]["State"] == "paused") {
-            $error = $status["UpdateStatus"]["Message"];
-            break;
-        }
-
     }
+    if ($error !== null)
+        throw new HttpException(json_encode(["registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "error"=>$error, "current_state"=>$status["CurrentState"]]), 520);
 
-    if($error !== null) {
-        throw new HttpException(json_encode(["registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "success"=>false, "error"=>$error]), 520);
-    }
-    return ["success"=>true, "registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType];
+    return ["success"=>true, "registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "current_state"=>$status["CurrentState"]];
     //return true;
 });
 

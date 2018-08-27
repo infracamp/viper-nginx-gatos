@@ -28,6 +28,33 @@ class DockerCmd
     }
 
 
+    public function getServicePs  (string $service)
+    {
+        $txtData = "[" . implode(",", phore_exec("sudo docker service ps --no-trunc --format '{{json . }}' :ID", ["ID"=>$service], true)) . "]";
+        return json_decode($txtData, true);
+    }
+
+
+    public function getServiceState (string $serviceId) {
+        $psData = $this->getServicePs($serviceId);
+        $state = [
+            "State" => null,
+            "CurrentState" => null,
+            "Error" => null
+        ];
+        if ($psData[0]["Error"] != "") {
+            $state["Error"] = $psData[0]["Error"];
+        }
+
+        if (preg_match("/^([A-Za-z]+)/", $psData[0]["CurrentState"], $matches)) {
+            $state["State"] = $matches[1];
+        }
+
+        $state["CurrentState"] = $psData[0]["CurrentState"];
+        return $state;
+    }
+
+
     public function getServiceInspect (string $service)
     {
         $inspectData = json_decode(phore_exec("sudo docker service inspect --format '{{json . }}' :ID", ["ID" => $service]), true);
