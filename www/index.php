@@ -80,9 +80,9 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
         sleep(1);
         $status = $cmd->getServiceState($serviceName);
 
-        if ((time()-20) > $startTime) {
+        if ((time()-90) > $startTime) {
             if ($updateType !== "create")
-                $error = "Timeout: No status in 20 seconds. ({$status["CurrentState"]})";
+                $error = "Timeout: No status in 90 seconds. ({$status["CurrentState"]})";
             break;
         }
 
