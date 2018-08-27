@@ -46,18 +46,24 @@ $app->addModule(new Bootstrap4Module());
 $app->router->delegate("/", InfoCtrl::class);
 $app->router->delegate("/logs/:serviceId", ServiceViewCtrl::class);
 
-$app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
+$app->router->on("/deploy/::registryPath", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
     if ($request->GET->get("key") !== CONF_DEPLOY_KEY)
         throw new HttpException("Authorisation (deploy key) failed", 403);
 
+    if ( ! isset ($_SERVER["HTTP_DEPLOY_REGISTRY_IMAGE"])) {
+        $registry = $_SERVER["HTTP_DEPLOY_REGISTRY_IMAGE"];
+    } else {
+        $registry = $routeParams->get("registryPath");
+    }
 
+    if ( ! fnmatch(CONF_ALLOW_REGISTRY_IMAGE, $registry))
+        throw new \InvalidArgumentException("Deployment of image '$registry' is not allowsed. Allowed path: '" . CONF_ALLOW_REGISTRY_IMAGE . "'");
 
-    $registry = CONF_REGISTRY_PREFIX . "/" . $routeParams->get("path");
     $serviceName = basename($registry);
 
     $cmd = new DockerCmd();
     try {
-        $cmd->dockerLogin(CONF_REGISTRY_LOGIN_USER, CONF_REGISTRY_LOGIN_PASS, explode("/", CONF_REGISTRY_PREFIX)[0]);
+        $cmd->dockerLogin(CONF_REGISTRY_LOGIN_USER, CONF_REGISTRY_LOGIN_PASS, explode("/", $registry)[0]);
     } catch (\Exception $e) {
         throw new HttpException("Registry authentication failed. (docker login): Check your CONF_REGISTRY_PREFIX_* and CONF_REGISTY_LOGIN_* are correct.",521);
     }
