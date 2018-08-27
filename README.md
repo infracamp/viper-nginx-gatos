@@ -19,7 +19,7 @@ viper nginx parses the docker-service `name` and builds virtual hosts `service-n
     CONF_CLUSTER_HOSTNAME=srv.demo.com
     CONF_DEFAULT_HOSTNAME=.srv.demo.com
     CONF_DEPLOY_KEY=secret_deploy_key
-    CONF_REGISTRY_PREFIX=registry.gitlab.com/yourOrganisation
+    CONF_ALLOW_REGISTRY_IMAGE=registry.gitlab.com/yourOrganisation/*
     CONF_REGISTRY_LOGIN_USER=user@gitlab.com
     CONF_REGISTRY_LOGIN_PASS=secret_registry_key
     ```
@@ -65,7 +65,7 @@ cloudfront:
 Login to one manager node and add the label `cf_domain=some.domain.name`:
 
 ```
-curl "http://cloudfront.your.domain/deploy?key=secret_deploy_key
+curl  --fail -X POST --data-binary @.kick.yml "$KICK_DEPLOY_HOST/deploy/$CI_REGISTRY_IMAGE?secret=$DEPLOY_SECRET"
 ```
 
 Will start/update a service `your_service` from `registry.gitlab.com/yourOrganisation/path/to/your_service:latest`.

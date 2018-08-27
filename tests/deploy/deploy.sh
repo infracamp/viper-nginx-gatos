@@ -2,6 +2,9 @@
 
 set -e
 
+
+
+
 CI_REGISTRY_IMAGE=registry.gitlab.com/talpasolutions/webservice/cockpit
 SECRET_KEY=secret_deploy_key
 

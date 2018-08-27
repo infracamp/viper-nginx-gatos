@@ -128,8 +128,8 @@ class DockerCmd
                 $dockerOpts["--restart-delay"] = $rp["delay"];
             }
             if (isset ($rp["max_attempts"])) {
-                if ( ! preg_match("/^[0-9]$/", $rp["max_attempts"]))
-                    throw new \InvalidArgumentException("restart_policy > max_attempts must match [0-9]+.");
+                if ( ! preg_match("/^[0-9]+$/", $rp["max_attempts"]))
+                    throw new \InvalidArgumentException("restart_policy > max_attempts must match '[0-9]+'.");
                 $dockerOpts["--restart-max-attempts"] = $rp["max_attempts"];
             }
             if (isset ($rp["window"])) {
