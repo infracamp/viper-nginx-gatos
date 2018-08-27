@@ -74,12 +74,58 @@ class DockerCmd
                 }
                 continue;
             }
-            $opts[] = $name . " " . $curVal;
+            $opts[] = $name . " " . $value;
         }
         return implode(" ", $opts);
     }
 
-    public function serviceDeploy (string $serviceName, string $image, string $label)
+
+    private function parseIntoDockerOpts (array $config, array $dockerOpts, $update=false)
+    {
+        if (isset ($config["restart_policy"])) {
+            $rp = $config["restart_policy"];
+            if (isset ($rp["condition"])) {
+                if ( ! in_array($rp["condition"], ["any", "on-failure", "none"]))
+                    throw new \InvalidArgumentException("restart_policy > condition must be any|on-failure|none.");
+                $dockerOpts["--restart-condition"] = $rp["condition"];
+            }
+            if (isset ($rp["delay"])) {
+                if ( ! preg_match("/^[0-9]+(ms|s|m|h)$/", $rp["delay"]))
+                    throw new \InvalidArgumentException("restart_policy > delay must match [0-9]+(ms|s|m|h).");
+                $dockerOpts["--restart-delay"] = $rp["delay"];
+            }
+            if (isset ($rp["max_attempts"])) {
+                if ( ! preg_match("/^[0-9]$/", $rp["max_attempts"]))
+                    throw new \InvalidArgumentException("restart_policy > max_attempts must match [0-9]+.");
+                $dockerOpts["--restart-max-attempts"] = $rp["max_attempts"];
+            }
+            if (isset ($rp["window"])) {
+                if ( ! preg_match("/^[0-9]+(ms|s|m|h)$/", $rp["window"]))
+                    throw new \InvalidArgumentException("restart_policy > window must match [0-9]+(ms|s|m|h).");
+                $dockerOpts["--restart-window"] = $rp["window"];
+            }
+        }
+        if (isset ($config["environment"])) {
+            $envName = "--env";
+            if ($update)
+                $envName = "--env-add";
+
+            $env = $config["environment"];
+            foreach ($env as $key => $value) {
+                if (is_int($key)) {
+                    if (is_array($value))
+                        throw new \InvalidArgumentException("Invalid environment section: " . print_r($value, true). ": complex type not allowed (See handbook for environment: - section).");
+                    $dockerOpts[$envName][] = escapeshellarg($value);
+                    continue;
+                }
+                $dockerOpts[$envName][] = escapeshellarg($key . "=". $value);
+            }
+        }
+        return $dockerOpts;
+    }
+
+
+    public function serviceDeploy (string $serviceName, string $image, array $config)
     {
 
         $runningServices = $this->getServiceList();
@@ -89,19 +135,24 @@ class DockerCmd
             "--with-registry-auth" => null,
             "--update-failure-action" => "pause",
             "--restart-max-attempts" => 3,
+            "--env" => [],
+            "--env-add" => []
         ];
 
         $opts =  [
-            "label"=> $label,
+            "label"=> CONFIG_SERVICE_LABEL . "=" . json_encode($config),
             "name" => $serviceName,
             "image" => $image,
             "network" => DOCKER_DEFAULT_NET
         ];
 
         if ( ! isset($runningServices[$serviceName])) {
+            $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);
             phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --label :label --network :network :image", $opts);
             $type="create";
         } else {
+            $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts, true);
+
             phore_exec("sudo docker service update -d --force {$this->buildParams($dockerOpts)} --label-add :label --image :image :name", $opts);
             $type="update";
         }

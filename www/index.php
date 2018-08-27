@@ -59,14 +59,20 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
     $rudlConfig = [];
     if ($request->requestMethod === "POST") {
         $data = file_get_contents("php://input");
-        $rudlConfig = yaml_parse($data);
-        if ($rudlConfig === false)
+        $kickConfig = yaml_parse($data);
+        if ($kickConfig === false)
             throw new HttpException("Cannot parse POST payload data. No valid yaml content.", 522);
+        if (  ! isset ($kickConfig["deploy"])) {
+            throw new HttpException("No deploy section found in post body.");
+        }
+        if ( ! isset($kickConfig["deploy"][CONF_CLUSTER_HOSTNAME]))
+            throw new HttpException("No deploy config for cluster '" . CONF_CLUSTER_HOSTNAME . "' in deploy section");
+        $rudlConfig = $kickConfig["deploy"][CONF_CLUSTER_HOSTNAME];
     }
 
-    $label = CONFIG_SERVICE_LABEL ."=" . json_encode($rudlConfig);
 
-    $updateType = $cmd->serviceDeploy($serviceName, $registry, $label);
+
+    $updateType = $cmd->serviceDeploy($serviceName, $registry, $rudlConfig);
 
     $error = null;
     $startTime = time();

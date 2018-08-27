@@ -16,7 +16,7 @@ define("CONF_CLUSTER_NAME", "%CONF_CLUSTER_NAME%");
 define("CONF_CLUSTER_HOSTNAME", "%CONF_CLUSTER_HOSTNAME%");
 
 // Key to encrypt configuration passwords with (Frontend)
-define("CONF_SECRET_ENCRYPT", "%CONF_SECRET_ENCRYPT%");
+define("CONF_SECRET_ENCRYPT", "");
 
 
 define("NGINX_CONF", "/etc/nginx/sites-enabled/cloudfront.conf");

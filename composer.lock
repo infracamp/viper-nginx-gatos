@@ -63,12 +63,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-html.git",
-                "reference": "0679ee267889d2fcbf05372327de03b8205d82a5"
+                "reference": "709364a6c7394b73909ed15931cf0542ebaab305"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-html/zipball/0679ee267889d2fcbf05372327de03b8205d82a5",
-                "reference": "0679ee267889d2fcbf05372327de03b8205d82a5",
+                "url": "https://api.github.com/repos/phore/phore-html/zipball/709364a6c7394b73909ed15931cf0542ebaab305",
+                "reference": "709364a6c7394b73909ed15931cf0542ebaab305",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-08-09T20:33:59+00:00"
+            "time": "2018-08-23T16:32:42+00:00"
         },
         {
             "name": "phore/http-client",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-micro-app.git",
-                "reference": "085f40de774a7cc750de7a8e712e11852439df54"
+                "reference": "6e8295a71dcf718c34e4a0494b197d55e331fce8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/085f40de774a7cc750de7a8e712e11852439df54",
-                "reference": "085f40de774a7cc750de7a8e712e11852439df54",
+                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/6e8295a71dcf718c34e4a0494b197d55e331fce8",
+                "reference": "6e8295a71dcf718c34e4a0494b197d55e331fce8",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 }
             ],
             "description": "Micro framework for rest api webservices",
-            "time": "2018-08-13T13:09:42+00:00"
+            "time": "2018-08-23T15:48:40+00:00"
         },
         {
             "name": "phore/system",
@@ -241,12 +241,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-theme-bootstrap.git",
-                "reference": "cf86fe901155b66bbeeba5a895ec4ed4d734b3b6"
+                "reference": "86826cfc43f04a28d897d736a36014e6aff77aa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-theme-bootstrap/zipball/cf86fe901155b66bbeeba5a895ec4ed4d734b3b6",
-                "reference": "cf86fe901155b66bbeeba5a895ec4ed4d734b3b6",
+                "url": "https://api.github.com/repos/phore/phore-theme-bootstrap/zipball/86826cfc43f04a28d897d736a36014e6aff77aa7",
+                "reference": "86826cfc43f04a28d897d736a36014e6aff77aa7",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +273,7 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-07-25T17:02:46+00:00"
+            "time": "2018-08-23T16:34:09+00:00"
         },
         {
             "name": "psr/container",
