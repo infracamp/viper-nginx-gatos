@@ -36,6 +36,7 @@ class InfoCtrl
         $cmd = new DockerCmd();
         foreach ($cmd->getServiceList() as $serviceName => $info){
             $inspect = $cmd->getServiceInspect($serviceName);
+            $state = $cmd->getServiceState($serviceName);
             $serviceConfig = $cmd->getParsedConfigLabel($serviceName);
 
             $links = fhtml();
@@ -47,18 +48,18 @@ class InfoCtrl
             }
 
             $err = null;
-            if (isset ($inspect["UpdateStatus"])) {
-                if ($inspect["UpdateStatus"]["State"] == "paused") {
-                    $err = $inspect["UpdateStatus"]["Message"];
-                }
+
+            if ($state["Error"] !== null) {
+                $err = $state["Error"];
             }
+
 
             $table->row([
                 $serviceName,
                 $info["Replicas"],
                 date("Y-m-d H:i:s", $this->parseTs($inspect["UpdatedAt"])),
                 $links,
-                $err
+                $state["CurrentState"] . " " . $err,
             ], $err === null ? "@table-success" : "@table-warning");
         }
 

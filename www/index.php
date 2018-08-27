@@ -33,7 +33,7 @@ $app->setResponseHandler(new JsonResponseHandler());
 $app->acl->addRule(\aclRule()->route("/*")->ALLOW());
 
 
-set_time_limit(90);
+set_time_limit(180);
 
 $app->addModule(new Bootstrap4Module());
 
@@ -59,44 +59,47 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
     $rudlConfig = [];
     if ($request->requestMethod === "POST") {
         $data = file_get_contents("php://input");
-        $rudlConfig = yaml_parse($data);
-        if ($rudlConfig === false)
+        $kickConfig = yaml_parse($data);
+        if ($kickConfig === false)
             throw new HttpException("Cannot parse POST payload data. No valid yaml content.", 522);
+        if (  ! isset ($kickConfig["deploy"])) {
+            throw new HttpException("No deploy section found in post body.");
+        }
+        if ( ! isset($kickConfig["deploy"][CONF_CLUSTER_HOSTNAME]))
+            throw new HttpException("No deploy config for cluster '" . CONF_CLUSTER_HOSTNAME . "' in deploy section");
+        $rudlConfig = $kickConfig["deploy"][CONF_CLUSTER_HOSTNAME];
     }
 
-    $label = CONFIG_SERVICE_LABEL ."=" . json_encode($rudlConfig);
 
-    $updateType = $cmd->serviceDeploy($serviceName, $registry, $label);
+
+    $updateType = $cmd->serviceDeploy($serviceName, $registry, $rudlConfig);
 
     $error = null;
     $startTime = time();
     while (true) {
         sleep(1);
-        $status = $cmd->getServiceInspect($serviceName);
-        if ((time()-20) > $startTime) {
+        $status = $cmd->getServiceState($serviceName);
+
+        if ((time()-120) > $startTime) {
             if ($updateType !== "create")
-                $error = "Timeout: No status in 20 seconds. (State: '{$status["UpdateStatus"]["State"]}' Message: '{$status["UpdateStatus"]["Message"]}')";
+                $error = "Timeout: No status in 120 seconds. ({$status["CurrentState"]})";
             break;
         }
 
-        if ( ! isset ($status["UpdateStatus"]))
-            continue;
+        if ($status["Error"] !== null) {
+            $error = $status["Error"];
+            break;
+        }
 
-        if ($status["UpdateStatus"]["State"] == "completed") {
+        if ($status["State"] === "Running") {
             $error = null;
             break;
         }
-        if ($status["UpdateStatus"]["State"] == "paused") {
-            $error = $status["UpdateStatus"]["Message"];
-            break;
-        }
-
     }
+    if ($error !== null)
+        throw new HttpException(json_encode(["registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "error"=>$error, "current_state"=>$status["CurrentState"]]), 520);
 
-    if($error !== null) {
-        throw new HttpException(json_encode(["registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "success"=>false, "error"=>$error]), 520);
-    }
-    return ["success"=>true, "registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType];
+    return ["success"=>true, "registry" => $registry, "serviceName" => $serviceName, "type"=>$updateType, "current_state"=>$status["CurrentState"]];
     //return true;
 });
 
