@@ -28,6 +28,12 @@ class DockerCmd
     }
 
 
+    public function getServiceLogs (string $service)
+    {
+        $logs = phore_exec("sudo docker service logs --no-task-ids :id", ["id"=>$service], false);
+        return $logs;
+    }
+
     public function getServicePs  (string $service)
     {
         $txtData = "[" . implode(",", phore_exec("sudo docker service ps --no-trunc --format '{{json . }}' :ID", ["ID"=>$service], true)) . "]";

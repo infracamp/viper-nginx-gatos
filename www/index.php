@@ -10,7 +10,10 @@ namespace App;
 
 use Infracamp\Gatos\DockerCmd;
 use Infracamp\Gatos\InfoCtrl;
+use Infracamp\Gatos\ServiceViewCtrl;
 use Phore\MicroApp\App;
+use Phore\MicroApp\Auth\BasicUserProvider;
+use Phore\MicroApp\Auth\HttpBasicAuthMech;
 use Phore\MicroApp\Exception\HttpException;
 use Phore\MicroApp\Handler\JsonExceptionHandler;
 use Phore\MicroApp\Handler\JsonResponseHandler;
@@ -28,17 +31,20 @@ $app = new App();
 $app->activateExceptionErrorHandlers();
 $app->setOnExceptionHandler(new JsonExceptionHandler());
 $app->setResponseHandler(new JsonResponseHandler());
+$app->authManager->setAuthMech(new HttpBasicAuthMech());
+$app->authManager->setUserProvider($up = new BasicUserProvider());
+$up->addUser("admin", '$6$WJOnadB0$DFIV/H2eKjayXekj6Zj6NtPOsrcZWW55QERBvMLM70FodQiEKowC2MmKHuboACJgFjSyDRp5BzE6Qm1vlP0rL1', "@admin", []);
 // Set Authentication
 
-$app->acl->addRule(\aclRule()->route("/*")->ALLOW());
-
+$app->acl->addRule(\aclRule()->route("/deploy/*")->ALLOW());
+$app->acl->addRule(\aclRule()->role("@user")->ALLOW());
 
 set_time_limit(180);
 
 $app->addModule(new Bootstrap4Module());
 
 $app->router->delegate("/", InfoCtrl::class);
-
+$app->router->delegate("/logs/:serviceId", ServiceViewCtrl::class);
 
 $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
     if ($request->GET->get("key") !== CONF_DEPLOY_KEY)

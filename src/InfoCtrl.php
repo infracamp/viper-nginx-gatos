@@ -55,7 +55,7 @@ class InfoCtrl
 
 
             $table->row([
-                $serviceName,
+                fhtml("a @href=:url", ["url"=>"/logs/{$serviceName}"])->content($serviceName),
                 $info["Replicas"],
                 date("Y-m-d H:i:s", $this->parseTs($inspect["UpdatedAt"])),
                 $links,
