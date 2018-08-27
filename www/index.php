@@ -47,17 +47,14 @@ $app->router->delegate("/", InfoCtrl::class);
 $app->router->delegate("/logs/:serviceId", ServiceViewCtrl::class);
 
 $app->router->on("/deploy/::registryPath", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
-    if ($request->GET->get("key") !== CONF_DEPLOY_KEY)
+    $key = $request->GET->get("secret");
+    if ($key !== CONF_DEPLOY_KEY)
         throw new HttpException("Authorisation (deploy key) failed", 403);
 
-    if ( ! isset ($_SERVER["HTTP_DEPLOY_REGISTRY_IMAGE"])) {
-        $registry = $_SERVER["HTTP_DEPLOY_REGISTRY_IMAGE"];
-    } else {
-        $registry = $routeParams->get("registryPath");
-    }
+    $registry = $routeParams->get("registryPath");
 
     if ( ! fnmatch(CONF_ALLOW_REGISTRY_IMAGE, $registry))
-        throw new \InvalidArgumentException("Deployment of image '$registry' is not allowsed. Allowed path: '" . CONF_ALLOW_REGISTRY_IMAGE . "'");
+        throw new \InvalidArgumentException("Deployment of image '$registry' is not allowed. Allowed path: '" . CONF_ALLOW_REGISTRY_IMAGE . "'");
 
     $serviceName = basename($registry);
 

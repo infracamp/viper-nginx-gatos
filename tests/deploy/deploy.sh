@@ -2,7 +2,10 @@
 
 set -e
 
+CI_REGISTRY_IMAGE=registry.gitlab.com/talpasolutions/webservice/cockpit
+SECRET_KEY=secret_deploy_key
+
 echo "deploying service..."
-curl  -X POST --data-binary @.kick.yml --header "X-Deploy-Image: $CI_REGISTRY_IMAGE" "http://localhost:4000/deploy/path/to/your_service?key=secret_deploy_key"
+curl  --fail -X POST --data-binary @.kick.yml "http://localhost:4000/deploy/$CI_REGISTRY_IMAGE?secret=$SECRET_KEY"
 
 echo "[OK]";

@@ -1,3 +1,5 @@
+version: 1
+# Other kickstart stuff...
 
 deploy:
   srv.demo.tld:
