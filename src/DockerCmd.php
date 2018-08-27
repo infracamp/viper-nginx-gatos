@@ -30,7 +30,7 @@ class DockerCmd
 
     public function getServiceLogs (string $service)
     {
-        $logs = phore_exec("sudo docker service logs --no-task-ids :id", ["id"=>$service], false);
+        $logs = phore_exec("sudo docker service logs --timestamps --no-task-ids :id | sort -n", ["id"=>$service], false);
         return $logs;
     }
 

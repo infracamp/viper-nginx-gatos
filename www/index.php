@@ -100,7 +100,7 @@ $app->router->on("/deploy/::registryPath", ["GET", "POST"], function (RouteParam
             break;
         }
 
-        if ($status["State"] === "Running") {
+        if ($status["State"] === "Running" ) {
             $error = null;
             break;
         }
