@@ -33,7 +33,7 @@ $app->setResponseHandler(new JsonResponseHandler());
 $app->acl->addRule(\aclRule()->route("/*")->ALLOW());
 
 
-set_time_limit(90);
+set_time_limit(180);
 
 $app->addModule(new Bootstrap4Module());
 
@@ -80,9 +80,9 @@ $app->router->on("/deploy/::path", ["GET", "POST"], function (RouteParams $route
         sleep(1);
         $status = $cmd->getServiceState($serviceName);
 
-        if ((time()-90) > $startTime) {
+        if ((time()-120) > $startTime) {
             if ($updateType !== "create")
-                $error = "Timeout: No status in 90 seconds. ({$status["CurrentState"]})";
+                $error = "Timeout: No status in 120 seconds. ({$status["CurrentState"]})";
             break;
         }
 
