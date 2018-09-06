@@ -24,8 +24,12 @@ if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "server{listen 80; listen [::]:80; server_name default; location / {  return 404; } location /404.html {root /var/www/html/nginxroot/error; internal;} error_page 404 /404.html; }";
-$config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { proxy_pass http://localhost:4000/; } }";
+$config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=10r/s;";
+$config .= "limit_req_zone \$binary_remote_addr zone=manager_limit:10m rate=2r/s;";
+$config .= "limit_req_status 429;";
+
+$config .= "\nserver{listen 80; listen [::]:80; server_name default; location / { limit_req zone=global_limit; return 404; } location /404.html { limit_req zone=global_limit;  root /var/www/html/nginxroot/error; internal;} error_page 404 /404.html; }";
+$config .= "\nserver{listen 80; listen [::]:80; server_name " . CONF_CLUSTER_HOSTNAME . "; location / { limit_req zone=manager_limit burst=10; proxy_pass http://localhost:4000/; } }";
 
 foreach ($services as $serviceName => $service) {
 
@@ -59,6 +63,7 @@ foreach ($services as $serviceName => $service) {
         server {
             listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
             location / {
+                limit_req zone=global_limit burst=20 nodelay;
                 proxy_set_header Host \$host;   
                 proxy_set_header X-Real-IP \$remote_addr;
                 proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; 
@@ -68,7 +73,7 @@ foreach ($services as $serviceName => $service) {
         ";
     } catch (\Exception $e) {
         $config .= "
-        server{listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; location / {  return 503; } location /503.html {root /var/www/html/nginxroot/error; internal;} error_page 503 /503.html; }
+        server{listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; location / {  limit_req zone=global_limit; return 503; } location /503.html { limit_req zone=global_limit; root /var/www/html/nginxroot/error; internal;} error_page 503 /503.html; }
         ";
     }
 

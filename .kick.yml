@@ -17,6 +17,7 @@ command:
     - "sudo apt-get -y install nginx docker.io"
     - "sudo rm /var/www/html/index.nginx-debian.html"
     - "sudo rm /etc/nginx/sites-enabled/default"
+    - "sudo cp /opt/etc/nginx/nginx.conf /etc/nginx/nginx.conf"
     - "composer update"
 
 

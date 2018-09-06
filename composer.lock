@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-micro-app.git",
-                "reference": "6e8295a71dcf718c34e4a0494b197d55e331fce8"
+                "reference": "304c23aae0ea420120e1c084a0096eacf65e5c1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/6e8295a71dcf718c34e4a0494b197d55e331fce8",
-                "reference": "6e8295a71dcf718c34e4a0494b197d55e331fce8",
+                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/304c23aae0ea420120e1c084a0096eacf65e5c1a",
+                "reference": "304c23aae0ea420120e1c084a0096eacf65e5c1a",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 }
             ],
             "description": "Micro framework for rest api webservices",
-            "time": "2018-08-23T15:48:40+00:00"
+            "time": "2018-09-04T07:33:41+00:00"
         },
         {
             "name": "phore/system",
