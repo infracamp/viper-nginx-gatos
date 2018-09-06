@@ -25,7 +25,7 @@ if (file_exists(NGINX_CONF)) {
 }
 
 $config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=10r/s;";
-$config .= "limit_req_zone \$binary_remote_addr zone=manager_limit:10m rate=2r/s;";
+$config .= "limit_req_zone \$binary_remote_addr zone=manager_limit:10m rate=1r/s;";
 $config .= "limit_req_status 429;";
 
 $config .= "\nserver{listen 80; listen [::]:80; server_name default; location / { limit_req zone=global_limit; return 404; } location /404.html { limit_req zone=global_limit;  root /var/www/html/nginxroot/error; internal;} error_page 404 /404.html; }";
