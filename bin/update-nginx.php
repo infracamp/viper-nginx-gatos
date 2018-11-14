@@ -54,6 +54,7 @@ foreach ($services as $serviceName => $service) {
     if (count($serverNames) == 0) {
         continue;
     }
+    sort($serverNames);
 
     try {
 
