@@ -62,7 +62,7 @@ foreach ($services as $serviceName => $service) {
         $config .= "
         server {
             listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
-            client_max_body_size 100M;
+            
             location / {
                 limit_req zone=global_limit burst=20 nodelay;
                 proxy_set_header Host \$host;   
