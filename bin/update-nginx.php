@@ -94,7 +94,10 @@ try {
 if ($sha !== sha1($config) || $localhostdown) {
     echo "\nRestart required.";
     file_put_contents(NGINX_CONF, $config);
-    phore_exec("sudo service nginx restart");
+    if ($localhostdown)
+        phore_exec("sudo service nginx restart");
+    else
+        phore_exec("sudo service nginx reload");
 }
 
 
