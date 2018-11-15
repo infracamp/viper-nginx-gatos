@@ -24,7 +24,7 @@ if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=20r/s;";
+$config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=100r/s;";
 $config .= "limit_req_zone \$binary_remote_addr zone=manager_limit:10m rate=5r/s;";
 $config .= "limit_req_status 429;";
 
@@ -68,7 +68,7 @@ foreach ($services as $serviceName => $service) {
             server_name " . implode (" ", $serverNames) . "; 
             
             location / {
-                limit_req zone=global_limit burst=50 nodelay;
+                limit_req zone=global_limit burst=200 nodelay;
                 proxy_set_header Host \$host;
                 proxy_set_header X-Real-IP \$remote_addr;
                 proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; 
