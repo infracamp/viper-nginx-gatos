@@ -76,6 +76,7 @@ foreach ($services as $serviceName => $service) {
             } 
         }
         ";
+
     } catch (\Exception $e) {
         $config .= "
         server{listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; location / {  limit_req zone=global_limit; return 503; } location /503.html { limit_req zone=global_limit; root /var/www/html/nginxroot/error; internal;} error_page 503 /503.html; }
