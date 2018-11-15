@@ -181,13 +181,19 @@ class DockerCmd
             "mode" => "replicated"
         ];
 
-        if (isset ($config["mode"]))
+        $globalService = false;
+        if (isset ($config["mode"])) {
             $opts["mode"] = $config["mode"];
+            if ($opts["mode"] === "global")
+                $globalService = true;
+        }
 
 
 
         if ( ! isset($runningServices[$serviceName])) {
             $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);
+            $dockerOpts["--constraint"] = "node.role!=manager";
+
             phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --mode :mode --label :label --network :network :image", $opts);
             $type="create";
         } else {
