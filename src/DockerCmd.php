@@ -138,6 +138,9 @@ class DockerCmd
                 $dockerOpts["--restart-window"] = $rp["window"];
             }
         }
+        if (isset($config["mode"])) {
+            $dockerOpts["--mode"] = $config["mode"];
+        }
         if (isset ($config["environment"])) {
             $envName = "--env";
             if ($update)
