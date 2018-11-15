@@ -59,7 +59,9 @@ foreach ($services as $serviceName => $service) {
     try {
 
 
-        phore_http_request("http://$serviceName")->send(true);
+        // False ignores 404 or 500 - but not connection exception
+        $return = phore_http_request("http://$serviceName")->send(false);
+
         $config .= "
         server {
             listen 80; listen [::]:80; server_name " . implode (" ", $serverNames) . "; 
