@@ -110,12 +110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-http-client.git",
-                "reference": "21fe52aa946a0f5e7568acbca6a2edd64cbb273c"
+                "reference": "7abdefa4cc288ca2dd756626e1130b5ecc746030"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/21fe52aa946a0f5e7568acbca6a2edd64cbb273c",
-                "reference": "21fe52aa946a0f5e7568acbca6a2edd64cbb273c",
+                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/7abdefa4cc288ca2dd756626e1130b5ecc746030",
+                "reference": "7abdefa4cc288ca2dd756626e1130b5ecc746030",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +151,7 @@
                 "Keyword1",
                 "Keyword2"
             ],
-            "time": "2018-11-08T15:39:05+00:00"
+            "time": "2018-11-15T10:34:21+00:00"
         },
         {
             "name": "phore/micro-app",

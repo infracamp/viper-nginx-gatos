@@ -25,5 +25,5 @@ command:
   #  - "sudo /opt/bin/update-nginx.php"
 
   interval:
-    #- "sudo docker node rm $(sudo docker node ls | grep Down | awk '{print $1}')"
+    - 'sudo /opt/bin/delete_offline_nodes.sh'
     - "sudo /opt/bin/update-nginx.php || true"
