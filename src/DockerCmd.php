@@ -138,9 +138,7 @@ class DockerCmd
                 $dockerOpts["--restart-window"] = $rp["window"];
             }
         }
-        if (isset($config["mode"])) {
-            $dockerOpts["--mode"] = $config["mode"];
-        }
+
         if (isset ($config["environment"])) {
             $envName = "--env";
             if ($update)
@@ -179,18 +177,29 @@ class DockerCmd
             "label"=> CONFIG_SERVICE_LABEL . "=" . json_encode($config),
             "name" => $serviceName,
             "image" => $image,
-            "network" => DOCKER_DEFAULT_NET
+            "network" => DOCKER_DEFAULT_NET,
+            "mode" => "replicated"
         ];
+
+        if (isset ($config["mode"]))
+            $opts["mode"] = $config["mode"];
+
+
 
         if ( ! isset($runningServices[$serviceName])) {
             $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);
-            phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --label :label --network :network :image", $opts);
+            phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --mode :mode --label :label --network :network :image", $opts);
             $type="create";
         } else {
-            $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts, true);
+            if (isset ($config["online"]) && $config["online"] == false) {
+                phore_exec("sudo docker service rm :name", $opts);
+                $type = "remove";
+            } else {
+                $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts, true);
 
-            phore_exec("sudo docker service update -d --force {$this->buildParams($dockerOpts)} --label-add :label --image :image :name", $opts);
-            $type="update";
+                phore_exec("sudo docker service update -d --force {$this->buildParams($dockerOpts)}  --label-add :label --image :image :name", $opts);
+                $type = "update";
+            }
         }
         return $type;
     }
