@@ -24,7 +24,7 @@ if (file_exists(NGINX_CONF)) {
     $sha = sha1_file(NGINX_CONF);
 }
 
-$config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=100r/s;";
+$config = "limit_req_zone \$binary_remote_addr zone=global_limit:10m rate=200r/s;";
 $config .= "limit_req_zone \$binary_remote_addr zone=manager_limit:10m rate=5r/s;";
 $config .= "limit_req_status 429;";
 

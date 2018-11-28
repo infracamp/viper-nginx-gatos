@@ -12,7 +12,7 @@
     "ext-json": "*",
     "phore/system": "dev-master",
     "phore/micro-app": "dev-master",
-    "phore/theme-bootstrap": "dev-master",
+    "phore/theme-bootstrap": "^0.1",
     "phore/http-client": "dev-master"
   },
   "autoload": {
