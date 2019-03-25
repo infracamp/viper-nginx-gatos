@@ -89,7 +89,7 @@ foreach ($services as $serviceName => $service) {
 
 $localhostdown = false;
 try {
-    phore_http_request("http://localhost")->send(true);
+    phore_http_request("http://localhost/cf_selfcheck.json")->send(true);
 } catch (\Exception $e) {
     $localhostdown = true;
     echo "Error: Localhost is down!";

@@ -83,4 +83,8 @@ docker run --env-file cloudfront.env -d -p 80:80 -p 443:443 --net host --network
 
 ```
 
+### Disable Nginx Output buffer
 
+```
+header('X-Accel-Buffering: no');
+```

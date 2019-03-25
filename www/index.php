@@ -46,6 +46,22 @@ $app->addModule(new Bootstrap4Module());
 $app->router->delegate("/", InfoCtrl::class);
 $app->router->delegate("/logs/:serviceId", ServiceViewCtrl::class);
 
+
+$app->router->on("/deploy/data", ["GET"], function() {
+
+   header('X-Accel-Buffering: no');
+   #header("Content-Encoding: identity");
+   ob_implicit_flush(1);
+   ob_end_flush();
+   ini_set("output_buffering", 0);
+   for ($i=0; $i<4; $i++) {
+       echo "Done!\n";
+       sleep(1);
+       flush();
+   }
+});
+
+
 $app->router->on("/deploy/::registryPath", ["GET", "POST"], function (RouteParams $routeParams, Request $request) {
     $key = $request->GET->get("secret");
     if ($key !== CONF_DEPLOY_KEY)

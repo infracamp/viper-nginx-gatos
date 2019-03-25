@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7f9328702dca22b1386cb557be5a601",
+    "content-hash": "d57c066af0d0773b37493faa7edf7741",
     "packages": [
         {
             "name": "phore/di-base",
@@ -59,16 +59,16 @@
         },
         {
             "name": "phore/html",
-            "version": "dev-master",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-html.git",
-                "reference": "50fb97beace5c97f12275e982182f4852b6a220e"
+                "reference": "4068e674a248b5036b2ebc9d3ff345f1384dbfc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-html/zipball/50fb97beace5c97f12275e982182f4852b6a220e",
-                "reference": "50fb97beace5c97f12275e982182f4852b6a220e",
+                "url": "https://api.github.com/repos/phore/phore-html/zipball/4068e674a248b5036b2ebc9d3ff345f1384dbfc9",
+                "reference": "4068e674a248b5036b2ebc9d3ff345f1384dbfc9",
                 "shasum": ""
             },
             "require": {
@@ -77,7 +77,7 @@
             },
             "require-dev": {
                 "erusev/parsedown-extra": "^0.7.1",
-                "phpunit/phpunit": "^7.4",
+                "phpunit/phpunit": "*",
                 "psr/http-message": "^1.0"
             },
             "suggest": {
@@ -102,7 +102,7 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-10-31T16:17:08+00:00"
+            "time": "2018-11-26T09:56:01+00:00"
         },
         {
             "name": "phore/http-client",
@@ -110,12 +110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-http-client.git",
-                "reference": "7abdefa4cc288ca2dd756626e1130b5ecc746030"
+                "reference": "fe3db26450083e0f236e245f0d034d0b298dc5ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/7abdefa4cc288ca2dd756626e1130b5ecc746030",
-                "reference": "7abdefa4cc288ca2dd756626e1130b5ecc746030",
+                "url": "https://api.github.com/repos/phore/phore-http-client/zipball/fe3db26450083e0f236e245f0d034d0b298dc5ff",
+                "reference": "fe3db26450083e0f236e245f0d034d0b298dc5ff",
                 "shasum": ""
             },
             "require": {
@@ -125,7 +125,9 @@
                 "php": ">=7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.5@dev"
+                "phore/cache": "*",
+                "phore/objectstore": "*",
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -151,7 +153,7 @@
                 "Keyword1",
                 "Keyword2"
             ],
-            "time": "2018-11-15T10:34:21+00:00"
+            "time": "2019-03-06T20:12:12+00:00"
         },
         {
             "name": "phore/micro-app",
@@ -159,12 +161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-micro-app.git",
-                "reference": "de2a8e259c78559511b1b5a94d5a25029b8ec96b"
+                "reference": "b9fcf0dde1827b0debc54701b7718d44a45d3eb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/de2a8e259c78559511b1b5a94d5a25029b8ec96b",
-                "reference": "de2a8e259c78559511b1b5a94d5a25029b8ec96b",
+                "url": "https://api.github.com/repos/phore/phore-micro-app/zipball/b9fcf0dde1827b0debc54701b7718d44a45d3eb3",
+                "reference": "b9fcf0dde1827b0debc54701b7718d44a45d3eb3",
                 "shasum": ""
             },
             "require": {
@@ -196,7 +198,7 @@
                 }
             ],
             "description": "Micro framework for rest api webservices",
-            "time": "2018-11-12T14:28:36+00:00"
+            "time": "2019-02-13T11:50:36+00:00"
         },
         {
             "name": "phore/system",
@@ -238,20 +240,20 @@
         },
         {
             "name": "phore/theme-bootstrap",
-            "version": "dev-master",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phore/phore-theme-bootstrap.git",
-                "reference": "b6064657dc15a7a51fe41ab5c34d1d4e55b21b10"
+                "reference": "1c485c8f0e01c1fef57ca3bb7b688e089d62ab94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phore/phore-theme-bootstrap/zipball/b6064657dc15a7a51fe41ab5c34d1d4e55b21b10",
-                "reference": "b6064657dc15a7a51fe41ab5c34d1d4e55b21b10",
+                "url": "https://api.github.com/repos/phore/phore-theme-bootstrap/zipball/1c485c8f0e01c1fef57ca3bb7b688e089d62ab94",
+                "reference": "1c485c8f0e01c1fef57ca3bb7b688e089d62ab94",
                 "shasum": ""
             },
             "require": {
-                "phore/html": "dev-master",
+                "phore/html": "^0.1",
                 "php": ">7.0"
             },
             "require-dev": {
@@ -274,7 +276,7 @@
                     "email": "leuffen@continue.de"
                 }
             ],
-            "time": "2018-11-14T13:15:16+00:00"
+            "time": "2018-11-28T16:53:44+00:00"
         },
         {
             "name": "psr/container",
@@ -282,12 +284,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "2cc4a01788191489dc7459446ba832fa79a216a7"
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/2cc4a01788191489dc7459446ba832fa79a216a7",
-                "reference": "2cc4a01788191489dc7459446ba832fa79a216a7",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/014d250daebff39eba15ba990eeb2a140798e77c",
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c",
                 "shasum": ""
             },
             "require": {
@@ -323,7 +325,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-06-28T15:35:32+00:00"
+            "time": "2018-12-29T15:36:03+00:00"
         }
     ],
     "packages-dev": [],
@@ -332,7 +334,6 @@
     "stability-flags": {
         "phore/system": 20,
         "phore/micro-app": 20,
-        "phore/theme-bootstrap": 20,
         "phore/http-client": 20
     },
     "prefer-stable": false,
