@@ -139,6 +139,16 @@ class DockerCmd
             }
         }
 
+        if ($update === false) {
+            if (isset($config["constraint"])) {
+                $dockerOpts["--constraint"] = $config["constraint"];
+            }
+
+            if (isset($config["mount"]) && isset($config["mount"]["source"]) && isset($config["mount"]["destination"])) {
+                $dockerOpts["--mount"] = "type=volume,source={$config["mount"]["source"]},destination={$config["mount"]["destination"]}";
+            }
+        }
+
         if (isset ($config["environment"])) {
             $envName = "--env";
             if ($update)
@@ -188,13 +198,8 @@ class DockerCmd
                 $globalService = true;
         }
 
-        if (isset($config["constraint"])) {
-            $dockerOpts["--constraint"] = $config["constraint"];
-        }
 
-        if (isset($config["mount"]) && isset($config["mount"]["source"]) && isset($config["mount"]["destination"])) {
-            $dockerOpts["--mount"] = "type=volume,source={$config["mount"]["source"]},destination={$config["mount"]["destination"]}";
-        }
+
 
         if ( ! isset($runningServices[$serviceName])) {
             $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);
