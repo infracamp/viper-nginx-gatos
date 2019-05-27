@@ -188,11 +188,15 @@ class DockerCmd
                 $globalService = true;
         }
 
+        if (isset($config["constraint"])) {
+            $dockerOpts["--constraint"] = $config["constraint"];
+        }
 
 
         if ( ! isset($runningServices[$serviceName])) {
             $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);
-            $dockerOpts["--constraint"] = "node.role!=manager";
+            if ( ! isset ($dockerOpts["--constraint"]))
+                $dockerOpts["--constraint"] = "node.role!=manager";
 
             phore_exec("sudo docker service create -d {$this->buildParams($dockerOpts)} --name :name --mode :mode --label :label --network :network :image", $opts);
             $type="create";
