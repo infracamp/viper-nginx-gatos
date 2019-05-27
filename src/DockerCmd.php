@@ -192,6 +192,9 @@ class DockerCmd
             $dockerOpts["--constraint"] = $config["constraint"];
         }
 
+        if (isset($config["mount"]) && isset($config["mount"]["source"]) && isset($config["mount"]["destination"])) {
+            $dockerOpts["--mount"] = "type=volume,source={$config["mount"]["source"]},destination={$config["mount"]["destination"]}";
+        }
 
         if ( ! isset($runningServices[$serviceName])) {
             $dockerOpts = $this->parseIntoDockerOpts($config, $dockerOpts);

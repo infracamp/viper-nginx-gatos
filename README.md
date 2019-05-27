@@ -59,6 +59,19 @@ cloudfront:
 ```
 
 
+```
+deploy:
+  <cluster-name>:
+    mode: replicated|global
+    online: true|false
+    mount:
+        source: "volumename"
+        destination: "/path/to/mount"
+    constraint: node.role!=manager
+    cloudfront:
+      hostnames:
+      - "hostname1.host.tld"
+```
 
 ### Adding additional host names
 
